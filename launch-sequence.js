@@ -26,20 +26,39 @@ async function submitCode() {
     const badGuy = findLog.who;
     console.log("The bad guy is:", badGuy);
 
-    let id = 8
 
-    const personnelID = await fetch(`/api/personnel/${id}`)
+    const personnelID = await fetch(`/api/personnel/${logsData[5].who}`)
     const personnelIdData = await personnelID.json();
     console.log(personnelIdData);
 
     const messageResponse = await fetch(`/api/messages?to=${badGuy}`);
     const messages = await messageResponse.json();
-    console.log("MESSAGE " + messages);
+    console.log("MESSAGE ", messages);
+
+    const findMessages = messages.find((message) => message.subject.includes( "LAUNCH CODES"))
+
+    console.log(findMessages.message)
+
+    const dogResponse = await fetch('/api/personnel/11')
+
+    const dogData = await dogResponse.json()
+
+    console.log(dogData)
+
 
     const hint = await fetch (`api/hint`)
     const hintData = await hint.json()
     console.log(hintData)
+
+    const submitReq = await fetch('/api/codes', {
+      method: "POST", 
+      body: JSON.stringify({
+        enter: dogData.name.toUpperCase(),
+      })
+    })
    
+    const submitData = await submitReq.json()
+    console.log(submitData)
   } catch (error) {
     console.error(`Error: ${error.message}`);
   }
